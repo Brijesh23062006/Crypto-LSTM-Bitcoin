@@ -157,34 +157,43 @@ st_autorefresh(
 # LOAD MODEL AND SCALERS
 # ---------------------------------
 
+
+# ---------------------------------
+# LOAD MODEL AND SCALERS
+# ---------------------------------
+
 @st.cache_resource
 def load_model():
-
     import os
 
-model_path = os.path.join(
-    os.path.dirname(__file__),
-    "crypto_model",
-    "lstm_model.keras"
-)
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    model_dir = os.path.join(base_path, "crypto_model")
 
-model = tf.keras.models.load_model(model_path)
+    model_path = os.path.join(
+        model_dir,
+        "lstm_model.keras"
+    )
+
+    model = tf.keras.models.load_model(model_path)
 
     scaler = joblib.load(
-        "crypto_model/feature_scaler.pkl"
+        os.path.join(model_dir, "feature_scaler.pkl")
     )
 
     close_scaler = joblib.load(
-        "crypto_model/close_scaler.pkl"
+        os.path.join(model_dir, "close_scaler.pkl")
     )
 
-    with open("crypto_model/features.json", "r") as f:
+    features_path = os.path.join(model_dir, "features.json")
+
+    with open(features_path, "r") as f:
         features = json.load(f)
 
     return model, scaler, close_scaler, features
 
 
 model, scaler, close_scaler, features = load_model()
+
 
 
 # ---------------------------------
