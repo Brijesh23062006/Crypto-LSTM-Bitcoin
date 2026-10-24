@@ -160,9 +160,15 @@ st_autorefresh(
 @st.cache_resource
 def load_model():
 
-    model = tf.keras.models.load_model(
-        "crypto_model/lstm_model.keras"
-    )
+    import os
+
+model_path = os.path.join(
+    os.path.dirname(__file__),
+    "crypto_model",
+    "lstm_model.keras"
+)
+
+model = tf.keras.models.load_model(model_path)
 
     scaler = joblib.load(
         "crypto_model/feature_scaler.pkl"
